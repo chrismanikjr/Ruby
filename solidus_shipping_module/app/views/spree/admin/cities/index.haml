@@ -1,0 +1,36 @@
+= render 'spree/admin/shared/areas_tabs'
+- admin_breadcrumb(Spree.t(:settings))
+- admin_breadcrumb(Spree.t('admin.tab.areas'))
+- admin_breadcrumb(plural_resource_name(Spree::City))
+- content_for :page_actions do
+  - if can?(:create, Spree::City)
+    %li
+      = button_link_to Spree.t(:new_city), new_admin_city_path
+
+%table#listing_states.index{"data-hook" => ""}
+  %colgroup
+    %col{:style => "width: 35%"}/
+    %col{:style => "width: 35%"}/
+    %col{:style => "width: 15%"}/
+    %col{:style => "width: 15%"}/
+  %thead
+    %tr{"data-hook" => "states_header"}
+      %th Country 
+      %th Province
+      %th City
+      %th.actions
+  %tbody
+    - @cities.each do |city|
+      %tr{:class => "#{cycle('odd', 'even')}", "data-hook" => "states_row", :id => "#{spree_dom_id city}"}
+        %td= city.country.name
+        %td= city.state.name
+        %td= city.name
+        / %td.align-center= state.abbr
+        / %td.actions
+        /   - if can?(:update, state)
+        /     = link_to_with_icon 'edit', Spree.t('actions.edit'), edit_admin_country_state_url(@country, state), :no_text => true
+        /   - if can?(:destroy, state)
+        /     = link_to_delete state, :no_text => true
+    - if @cities.empty?
+      %tr
+        %td{:colspan => "3"}= Spree.t(:none)

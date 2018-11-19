@@ -1,0 +1,31 @@
+<% admin_breadcrumb(Spree.t(:settings)) %>
+<% admin_breadcrumb(Spree.t('admin.tab.shipping')) %>
+<% admin_breadcrumb(link_to plural_resource_name(Spree::ShippingMethod), spree.admin_cargo_shipping_rates_per_methods_path) %>
+<% @shipping_method = Spree::ShippingMethod.find_by_id params[:shipping_method_id] %>
+<% if @shipping_method %>
+    <% admin_breadcrumb(@shipping_method.name) %>
+<% end %>
+<% content_for :page_actions do %>
+    <% if @shipping_method %>
+        <li>
+          <%= button_link_to "View Shipping Rate", admin_cargo_shipping_rates_per_methods_path(shipping_method_id: @shipping_method.id) %>
+        </li>
+    <% end %>
+<% end %>
+<fieldset class="no-border-top">
+  <%= form_for [:admin, @cargo_shipping_rates_per_method] do |f|  %>
+      <%= render :partial => 'form', :locals => { :f => f } %>
+      <div class="clear"></div>
+      <div class="form-buttons filter-actions actions" data-hook="buttons">
+        <%= button Spree.t('actions.update') %>
+      </div>
+  <% end %>
+</fieldset>
+<fieldset class="no-border-top">
+  <h2>Import Files</h2>
+  <%= form_tag import_admin_cargo_shipping_rates_per_methods_path, multipart: true do %>
+      <%= hidden_field_tag :shipping_method_id, params[:shipping_method_id] %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import" %>
+  <% end %>
+</fieldset>

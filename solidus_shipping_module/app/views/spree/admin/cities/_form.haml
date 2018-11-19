@@ -1,0 +1,18 @@
+.four.columns
+  = f.field_container :country_id do
+    = f.label :country_id
+    %br/
+    = f.select :country_id, Spree::Country.all.collect {|p| [ p.name, p.id ] }, {}, { class: 'select2 fullwidth' }
+    = error_message_on :country_id, :display_on
+.four.columns
+  = f.field_container :state_id do
+    = f.label :state_id
+    %br/
+    = f.select :state_id, Spree::State.all.collect {|p| [ p.name, p.id ] }, {}, { class: 'select2 fullwidth' }
+    = error_message_on :state_id, :display_on
+.four.columns
+  = f.field_container :name do
+    = f.label :name
+    %br/
+    = f.text_field :name, :class => 'fullwidth', :label => false
+    = error_message_on :name, :display_on

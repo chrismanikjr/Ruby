@@ -1,0 +1,59 @@
+- admin_breadcrumb(Spree.t(:settings))
+- admin_breadcrumb(Spree.t('admin.tab.shipping'))
+- admin_breadcrumb(link_to plural_resource_name(Spree::ShippingMethod), spree.admin_shipping_methods_path)
+- @shipping_method = Spree::ShippingMethod.find_by_id params[:shipping_method_id]
+- if @shipping_method
+  - admin_breadcrumb(@shipping_method.name)
+- content_for :page_actions do
+  - if @shipping_method
+    %li= button_link_to "Import Shipping Rate", new_admin_shipping_rates_per_method_path(shipping_method_id: @shipping_method.id)
+= form_for('Filter_shipping', :as => 'filter_shipping', method: :get, :url => admin_shipping_rates_per_methods_path) do |f|
+  .row
+    .col-sm-4
+      .form-group.form-group-default.required
+        %label Province
+        = text_field_tag 'province_contain', nil, class: 'form-control'
+    .col-sm-4
+      .form-group.form-group-default.required
+        %label City
+        = text_field_tag 'city_contain', nil, class: 'form-control'
+    .col-sm-4
+      %br
+      = hidden_field_tag :shipping_method_id, @shipping_method.id
+      = f.submit "Search", class: "btn btn-success"
+
+= paginate @rates, theme: "solidus_admin"
+
+- if @rates.any?
+  %table
+    %colgroup
+      %col{style: "width: 15%"}
+      %col{style: "width: 20%"}
+      %col{style: "width: 20%"}
+      %col{style: "width: 15%"}
+      %col{style: "width: 17%"}
+    %thead
+      %tr
+        %th Province
+        %th City
+        %th Min. Weight
+        %th Price
+        %th Duration
+    %tbody
+      - @rates.each do |r|
+        %tr
+          %td= r.state_name
+          %td= r.city_name
+          %td= r.min_weight
+          %td= number_to_currency r.price
+          %td= r.etd
+          %td.actions
+            = link_to_edit r, :no_text => true, :class => 'edit' if can?(:edit, r)
+            &nbsp;
+            = link_to_delete r, :no_text => true if can?(:delete, r) 
+- else
+  .alpha.twelve.columns.no-objects-found
+    = render 'spree/admin/shared/no_objects_found', resource: Spree::ShippingRatesPerMethod, new_resource_url: new_object_url
+
+= paginate @rates, theme: "solidus_admin" 
+

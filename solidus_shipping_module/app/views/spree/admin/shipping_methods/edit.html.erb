@@ -1,0 +1,37 @@
+<%= render 'spree/admin/shared/shipping_tabs' %>
+<% admin_breadcrumb(Spree.t(:settings)) %>
+<% admin_breadcrumb(Spree.t('admin.tab.shipping')) %>
+<% admin_breadcrumb(link_to plural_resource_name(Spree::ShippingMethod), spree.admin_shipping_methods_path) %>
+<% admin_breadcrumb(@shipping_method.name) %>
+<% content_for :page_actions do %>
+    <% if @shipping_method.calculator.is_a?(Spree::Calculator::Shipping::WeightCalculator) %>
+        <li>
+          <%= button_link_to "View Shipping Rate", admin_shipping_rates_per_methods_path(shipping_method_id: @shipping_method.id) %>
+        </li>
+        <li>
+          <%= button_link_to "Import Shipping Rate", new_admin_shipping_rates_per_method_path(shipping_method_id: @shipping_method.id) %>
+        </li>
+    <% else %>
+        <li>
+          <%= button_link_to "View Shipping Rate", admin_cargo_shipping_rates_per_methods_path(shipping_method_id: @shipping_method.id) %>
+        </li>
+        <li>
+          <%= button_link_to "Import Shipping Rate", new_admin_cargo_shipping_rates_per_method_path(shipping_method_id: @shipping_method.id) %>
+        </li>
+    <% end %>
+<% #byebug %>
+<% end %>
+<div data-hook="admin_shipping_method_edit_form_header">
+  <%= render :partial => 'spree/shared/error_messages', :locals => { :target => @shipping_method } %>
+</div>
+<div data-hook="admin_shipping_method_edit_form">
+  <%= form_for [:admin, @shipping_method] do |f| %>
+      <fieldset class="no-border-top">
+        <%= render :partial => 'form', :locals => { :f => f } %>
+        <div class="clear"></div>
+        <div data-hook="admin_shipping_method_edit_form_buttons">
+          <%= render :partial => 'spree/admin/shared/edit_resource_links' %>
+        </div>
+      </fieldset>
+  <% end %>
+</div>

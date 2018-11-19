@@ -1,0 +1,13 @@
+<% admin_breadcrumb(Spree.t(:settings)) %>
+<% admin_breadcrumb(Spree.t('admin.tab.shipping')) %>
+<% admin_breadcrumb(link_to plural_resource_name(Spree::ShippingMethod), spree.admin_shipping_methods_path) %>
+<% admin_breadcrumb(@object.shipping_method.name) %>
+<fieldset class="no-border-top">
+  <%= form_for [:admin, @cargo_shipping_rates_per_method] do |f|  %>
+      <%= render :partial => 'form', :locals => { :f => f } %>
+      <div class="clear"></div>
+      <div class="form-buttons filter-actions actions" data-hook="buttons">
+        <%= button Spree.t('actions.update') %>
+      </div>
+  <% end %>
+</fieldset>

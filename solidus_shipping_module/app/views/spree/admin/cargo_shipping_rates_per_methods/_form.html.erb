@@ -1,0 +1,72 @@
+<h2>New Shipping Rate</h2>
+<div class="four columns">
+  <%= f.field_container :country_id do %>
+      <%= f.label :country_id %>
+      <br/>
+      <%= f.collection_select :country_id, Spree::Country.all, :id, :name, {}, {:class => 'select2 fullwidth'}%>
+      <%= error_message_on :country_id, :display_on %>
+  <% end %>
+</div>
+<div class="four columns">
+  <%= f.field_container :state_id do %>
+      <%= f.label :state_id %>
+      <br/>
+      <%= f.collection_select :state_id, Spree::State.all, :id, :name, {:include_blank => true}, {:class => 'select2 fullwidth'} %>
+      <%= error_message_on :state_id, :display_on %>
+  <% end %>
+</div>
+<div class="four columns">
+  <%= f.field_container :city_id do %>
+      <%= f.label :city_id %>
+      <br/>
+      <%= f.collection_select :city_id, Spree::City.all, :id, :name, {include_blank: true}, {:class => 'select2 fullwidth'}%>
+      <%= error_message_on :city_id, :display_on %>
+  <% end %>
+</div>
+<div class="clear"></div>
+<div class="three columns">
+  <%= f.field_container :adm_price do %>
+      <%= f.label :adm_price %>
+      <br/>
+      <%= f.text_field :adm_price, :class => 'fullwidth', :label => false %>
+      <%= error_message_on :adm_price, :display_on %>
+  <% end %>
+</div>
+<div class="four columns">
+  <%= f.field_container :etd do %>
+      <%= f.label :etd %>
+      <br/>
+      <%= f.text_field :etd, :class => 'fullwidth', :label => false %>
+      <%= error_message_on :etd, :display_on %>
+  <% end %>
+</div>
+<table>
+  <thead>
+  <tr>
+    <th>No</th>
+    <th>Service</th>
+    <th>Price</th>
+  </tr>
+  </thead>
+  <tbody>
+  <%
+      hash_detail = @cargo_shipping_rates_per_method.cargo_detail_shipping_rates_per_methods.map { |u| [u.weight, u] }.to_h
+  %>
+
+
+  <% for i in 1..50 do %>
+      <tr>
+        <td>
+          <%= f.label i.to_s+"." %>
+        </td>
+        <td>
+          <%= f.label "Price "+i.to_s+" kg" %>
+        </td>
+        <td>
+          <%= f.number_field "price_"+i.to_s, :class => 'fullwidth', :label => false, :step => 0.01, :value => hash_detail[i].nil? ? 0 : hash_detail[i].price %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= f.hidden_field :shipping_method_id, :value => params[:shipping_method_id].nil? ? @cargo_shipping_rates_per_method.shipping_method_id : params[:shipping_method_id] %>

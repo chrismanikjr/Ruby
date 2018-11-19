@@ -1,0 +1,45 @@
+%h2 New Shipping Rate
+.four.columns
+  = f.field_container :country_id do
+    = f.label :country_id
+    %br/
+    = f.collection_select :country_id, Spree::Country.all, :id, :name, {}, {:class => 'select2 fullwidth'}
+    = error_message_on :country_id, :display_on
+.four.columns
+  = f.field_container :state_id do
+    = f.label :state_id
+    %br/
+    = f.collection_select :state_id, Spree::State.all, :id, :name, {:include_blank => true}, {:class => 'select2 fullwidth'}
+    = error_message_on :state_id, :display_on
+.four.columns
+  = f.field_container :city_id do
+    = f.label :city_id
+    %br/
+    = f.collection_select :city_id, Spree::City.all, :id, :name, {include_blank: true}, {:class => 'select2 fullwidth'}
+    = error_message_on :city_id, :display_on
+.clear
+.three.columns
+  = f.field_container :price do
+    = f.label :price
+    %br/
+    = f.text_field :price, :class => 'fullwidth', :label => false
+    = error_message_on :price, :display_on
+.three.columns
+  = f.field_container :adm_price do
+    = f.label :adm_price
+    %br/
+    = f.text_field :adm_price, :class => 'fullwidth', :label => false
+    = error_message_on :adm_price, :display_on
+.four.columns
+  = f.field_container :etd do
+    = f.label :etd
+    %br/
+    = f.text_field :etd, :class => 'fullwidth', :label => false
+    = error_message_on :etd, :display_on
+.two.columns
+  = f.field_container :min_weight do
+    = f.label :min_weight
+    %br/
+    = f.text_field :min_weight, :class => 'fullwidth', :label => false
+    = error_message_on :min_weight, :display_on
+= f.hidden_field :shipping_method_id, :value => params[:shipping_method_id].nil? ? @shipping_rates_per_method.shipping_method_id : params[:shipping_method_id]
